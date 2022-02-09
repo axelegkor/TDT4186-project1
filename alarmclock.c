@@ -1,38 +1,35 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdbool.h>
+
+const char * current_time()
+{
+    time_t currentTime;
+    struct tm * timeinfo;
+
+    time (&currentTime);
+    timeinfo = localtime (&currentTime);
+    return "%s", asctime (timeinfo);
+}
 
 void print_menu(void)
 {
     char choice;
 
-    printf("Welcome! What do you wish to do?. \n's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ");
+    printf("Welcome to the alarm clock! It is currently %s \n Please enter 's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ", current_time());
     scanf("%c", &choice);
-
-    while (1)
-    {
-        scanf("%c", &choice);
+    
+    while(1) {
         if (choice == 'x')
         {
             printf("You have exited.");
-            break;
         }
     }
 }
 
-void display_current_time()
-{
-}
-
 int main()
 {
-    /* print_menu();*/
-    time_t current_time;
-
-    time(&current_time);
-
-    ctime(&current_time);
-
-    printf("%s", ctime(&current_time));
+    print_menu();
 
     return 0;
 }
