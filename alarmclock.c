@@ -4,17 +4,34 @@
 #include <stdlib.h>
 #include <string.h>
 
+int counter = 0; // Holder styr på hvor neste alarm legges til i time_array
+time_t time_array[10] = {0}; // Inneholder alarmene
 
-void add_timestamps(time_t alarm) 
+void add_timestamps() // Legger til alarm i time_array
 {
-    time_t time_array[10] = { 0 };
+    char input[19];
+    time_t alarm;
+    struct tm time_tm;
+    
+    printf("Schedule alarm at which date and time? ");
+    scanf("%s", &input);
 
-    int length = sizeof(time_array)/sizeof(time_array[0]);
-    time_array[length + 1] = alarm;
+    memset(&time_tm, 0, sizeof(struct tm));
+    strptime(input, "%Y-%b-%d %T", &time_tm);
+    alarm = mktime(&time_tm);
 
-     for (int k = 0; k < 5; k++) {
-        printf("%ld, ", time_array[k]);
-    } 
+    time_array[counter] = alarm;
+    counter++;
+    /* evt. print how many sec from now */
+}
+
+void cancel_alarm(int alarm_number) // Fjerner en alarm fra time_array
+{
+    for (int i = alarm_number; i < 9; i++) {
+        time_array[i] = time_array[i + 1];
+        time_array[9] = 0;
+    }
+    counter--;
 }
 
 const char * current_time()
@@ -27,26 +44,34 @@ const char * current_time()
     return "%s", asctime(timeinfo);
 }
 
-void print_menu()
+int main()
 {
     char choice;
+    printf("Welcome to the alarm clock! It is currently %s\n Please enter 's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ", current_time());
 
-    printf("Welcome to the alarm clock! It is currently %s \n Please enter 's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ", current_time());
-    scanf("%c", &choice);
-    
-    while(1) {
+    while (1)
+    {
         scanf("%c", &choice);
+        
         if (choice == 'x')
         {
             printf("Goodbye!");
             break;
         }
+        else if (choice == 's') {
+            add_timestamps();
+        }
+        else if (choice == 'c') {
+            int cancel__num;
+            printf("Choose which alarm you want to cancel: ");
+            scanf("%d", &cancel__num);
+            cancel_alarm(cancel__num);
+        }
+        else if (choice == 'l') {
+            for (int i = 0; i < counter; i++) {
+                printf("%ld", &time_array[i]);
+            }
+        }
     }
-}
-
-int main()
-{
-    add_timestamps(33);    
-
     return 0;
 }
