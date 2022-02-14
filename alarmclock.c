@@ -21,8 +21,18 @@ void add_timestamps() // Legger til alarm i time_array
     alarm = mktime(&time_tm);
 
     time_array[counter] = alarm;
+    printf("Added %s to list\n", &alarm);
     counter++;
     /* evt. print how many sec from now */
+}
+
+void list_alarms() 
+{
+    for (int i = 0; i < counter; i++) {
+        char readable_alarm[19];
+        strftime(readable_alarm, 19, "Alarm at %Y-%b-%d %T", &time_array[i]);
+        printf("%s \n", readable_alarm);
+    }
 }
 
 void cancel_alarm(int alarm_number) // Fjerner en alarm fra time_array
@@ -44,7 +54,7 @@ const char * current_time()
     return "%s", asctime(timeinfo);
 }
 
-int main()
+int main() // 2022-05-03 14:14:12
 {
     char choice;
     printf("Welcome to the alarm clock! It is currently %s\n Please enter 's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ", current_time());
@@ -68,9 +78,7 @@ int main()
             cancel_alarm(cancel__num);
         }
         else if (choice == 'l') {
-            for (int i = 0; i < counter; i++) {
-                printf("%ld", &time_array[i]);
-            }
+            list_alarms();
         }
     }
     return 0;
