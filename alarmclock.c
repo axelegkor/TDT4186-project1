@@ -15,11 +15,13 @@ void add_timestamps() // Legger til alarm i time_array
     struct tm time_tm;
     
     printf("Schedule alarm at which date and time? ");
+    fflush(stdin);
     scanf("%20[^", &input);
 
     // memset(&time_tm, 0, sizeof(struct tm)); // Trengs denne linjen??
     strptime(input, "%Y-%m-%d %H:%M:%S", &time_tm);
     alarm = mktime(&time_tm);
+
 
     strftime( out, 19, "%Y-%m-%d %H:%M:%S", localtime (&alarm) );
     printf("%s\n", out);
@@ -54,7 +56,7 @@ const char * current_time()
 
 int main()
 {
-    /*schar choice;
+    char choice;
     printf("Welcome to the alarm clock! It is currently %s\n Please enter 's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ", current_time());
 
     while (1)
@@ -77,10 +79,13 @@ int main()
         }
         else if (choice == 'l') {
             for (int i = 0; i < counter; i++) {
-                printf("%ld", &time_array[i]);
+                //printf("%ld", &time_array[i]);
+                char out[17];
+                strftime( out, 17, "%Y-%m-%d %H:%M:%S", localtime (&time_array[i]));
+                printf("%s\n", out);
             }
         }
-    }*/
+    }
     /*time_t alarm;
     struct tm time_tm;
 
@@ -93,7 +98,8 @@ int main()
     long sec = unix_time - time(NULL);
 
     printf("det er: %ld", sec);*/
-    add_timestamps();
+    
+    //add_timestamps();
 
     return 0;
 }
