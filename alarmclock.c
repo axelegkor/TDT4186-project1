@@ -10,19 +10,27 @@ time_t time_array[10] = {0}; // Inneholder alarmene
 void add_timestamps() // Legger til alarm i time_array
 {
     char input[19];
+    char out[19];
     time_t alarm;
     struct tm time_tm;
     
     printf("Schedule alarm at which date and time? ");
-    scanf("%s", &input);
+    scanf("%20[^", &input);
 
-    memset(&time_tm, 0, sizeof(struct tm));
-    strptime(input, "%Y-%b-%d %T", &time_tm);
+    // memset(&time_tm, 0, sizeof(struct tm)); // Trengs denne linjen??
+    strptime(input, "%Y-%m-%d %H:%M:%S", &time_tm);
     alarm = mktime(&time_tm);
+
+    strftime( out, 19, "%Y-%m-%d %H:%M:%S", localtime (&alarm) );
+    printf("%s\n", out);
+
+    long sec = alarm - time(NULL);
+
+    //printf("There are: %ld seconds until %s\n", sec, input);
+    // printf("sec: %ld", sec);
 
     time_array[counter] = alarm;
     counter++;
-    /* evt. print how many sec from now */
 }
 
 void cancel_alarm(int alarm_number) // Fjerner en alarm fra time_array
@@ -46,7 +54,7 @@ const char * current_time()
 
 int main()
 {
-    char choice;
+    /*schar choice;
     printf("Welcome to the alarm clock! It is currently %s\n Please enter 's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ", current_time());
 
     while (1)
@@ -72,6 +80,20 @@ int main()
                 printf("%ld", &time_array[i]);
             }
         }
-    }
+    }*/
+    /*time_t alarm;
+    struct tm time_tm;
+
+    printf("skriv noe: ");
+    scanf("%19[^\n", alarm);
+
+    strptime(alarm, "%Y-%m-%d %H:%M:%S", &time_tm);
+
+    time_t unix_time = mktime(&time_tm);
+    long sec = unix_time - time(NULL);
+
+    printf("det er: %ld", sec);*/
+    add_timestamps();
+
     return 0;
 }
