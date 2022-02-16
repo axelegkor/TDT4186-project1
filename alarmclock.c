@@ -32,7 +32,7 @@ void add_timestamps() // Legger til alarm i time_array
         scanf("%s", &input);
 
         memset(&time_tm, 0, sizeof(struct tm));
-        strptime(input, "%Y-%b-%d %T", &time_tm);
+        strptime(input, "%Y-%m-%d %T", &time_tm);
         alarm = mktime(&time_tm);
 
         alarm_tuple[counter].time = alarm;
@@ -100,7 +100,10 @@ int main()
         }
         else if (choice == 'l') {
             for (int i = 0; i < counter; i++) {
-                printf("%ld", &alarm_tuple[i].time);
+                //printf("%ld", &alarm_tuple[i].time);
+                char alarmstring[20];
+                strftime(alarmstring, 30, "%Y-%m-%d %H:%M:%S", localtime(&alarm_tuple[i].time));
+                printf("%s", alarmstring);
             }
         }
     }
