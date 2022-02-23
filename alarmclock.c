@@ -14,6 +14,14 @@ static struct {
     pid_t pid;
 } alarm_tuple[10];
 
+void flush(void)
+{
+    int i;
+    do {
+        i = getchar();
+    } while (i != '\n' && i != EOF);
+}
+
 void alarm_set(int sleeptime){
     sleep(sleeptime);
 
@@ -31,10 +39,12 @@ void add_timestamps() // Legger til alarm i time_array
     struct tm time_tm;
     
     printf("Schedule alarm at which date and time? ");
-    fflush(stdin);
+    
+    //fflush(stdin);
     scanf("%[^\n]", &input);
+    flush();
 
-    // memset(&time_tm, 0, sizeof(struct tm)); // Trengs denne linjen??
+    memset(&time_tm, 0, sizeof(struct tm)); // Trengs denne linjen??
     strptime(input, "%Y-%m-%d %H:%M:%S", &time_tm);
     alarm = mktime(&time_tm);
 
@@ -100,7 +110,8 @@ int main()
             break;
         }
         else if (choice == 's') {
-            fflush(stdin);
+            flush();
+            //fflush(stdin);
             add_timestamps();
         }
         else if (choice == 'c') {
