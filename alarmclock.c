@@ -63,9 +63,8 @@ void add_timestamps() // Legger til alarm i time_array
     counter++;
 }
 
-void cancel_alarm(int alarm_number)
-{   
-    pid_t killpid = alarm_tuple[alarm_number].pid;
+void remove_alarm(int alarm_number)
+{
     for (int i = alarm_number; i < 9; i++) {
         alarm_tuple[i].time = alarm_tuple[i + 1].time;
         alarm_tuple[i].pid = alarm_tuple[i + 1].pid;
@@ -73,6 +72,12 @@ void cancel_alarm(int alarm_number)
         alarm_tuple[9].pid = 0;
     }
     counter--;
+}
+
+void cancel_alarm(int alarm_number)
+{   
+    pid_t killpid = alarm_tuple[alarm_number].pid;
+    remove_alarm(alarm_number);
     kill(killpid, SIGKILL);
 }
 
@@ -103,6 +108,16 @@ int main()
     while (1)
     {
         scanf("%c", &choice);
+
+        pid_t terminated = waitpid(-1, NULL, WNOHANG);
+        while (terminated > 0) {
+            for (int i = 0; i < counter; i++) {
+                if (alarm_tuple[i].pid == terminated) {
+                    remove_alarm(i);
+                }
+            }
+            terminated = waitpid(-1, NULL, WNOHANG);
+        }        
         
         if (choice == 'x')
         {
