@@ -22,7 +22,7 @@ void flush(void)
     } while (i != '\n' && i != EOF);
 }
 
-void alarm_set(int sleeptime){
+void alarm_set(int sleeptime) {
     sleep(sleeptime);
 
     // Playing alarm sound for MacOS
@@ -32,7 +32,7 @@ void alarm_set(int sleeptime){
     exit(0);
 }
 
-void add_timestamps() // Legger til alarm i time_array
+void add_timestamps() // Adds  alarm to alarm_tuple
 {
     char input[19];
     time_t alarm;
@@ -40,11 +40,10 @@ void add_timestamps() // Legger til alarm i time_array
     
     printf("Schedule alarm at which date and time? ");
     
-    //fflush(stdin);
     scanf("%[^\n]", &input);
     flush();
 
-    memset(&time_tm, 0, sizeof(struct tm)); // Trengs denne linjen??
+    memset(&time_tm, 0, sizeof(struct tm));
     strptime(input, "%Y-%m-%d %H:%M:%S", &time_tm);
     alarm = mktime(&time_tm);
 
@@ -79,6 +78,7 @@ void cancel_alarm(int alarm_number)
     pid_t killpid = alarm_tuple[alarm_number].pid;
     remove_alarm(alarm_number);
     kill(killpid, SIGKILL);
+    printf("The alarm %d has been cancelled.\n", alarm_number);
 }
 
 const char * current_time()
@@ -92,7 +92,8 @@ const char * current_time()
 }
 
 void list_alarms() 
-{
+{   
+    printf("\n");
     for (int i = 0; i < counter; i++) {
         char out[19];
         strftime(out, 19, "%Y-%m-%d %H:%M:%S", localtime(&alarm_tuple[i].time));
