@@ -32,7 +32,7 @@ void add_timestamps() // Legger til alarm i time_array
     
     printf("Schedule alarm at which date and time? ");
     fflush(stdin);
-    scanf("%19[^", &input);
+    scanf("%[^\n]", &input);
 
     // memset(&time_tm, 0, sizeof(struct tm)); // Trengs denne linjen??
     strptime(input, "%Y-%m-%d %H:%M:%S", &time_tm);
@@ -73,7 +73,7 @@ const char * current_time()
 
     time (&currentTime);
     timeinfo = localtime(&currentTime);
-    return "%s", asctime(timeinfo);
+    return asctime(timeinfo);
 }
 
 void list_alarms() 
@@ -105,7 +105,8 @@ int main()
         }
         else if (choice == 'c') {
             int cancel__num;
-            printf("Choose which alarm you want to cancel: ");
+            list_alarms();
+            printf("Choose which alarm you want to cancel from the alarms above: ");
             scanf("%d", &cancel__num);
             cancel_alarm(cancel__num);
         }
