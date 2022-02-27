@@ -78,7 +78,7 @@ void cancel_alarm(int alarm_number)
     pid_t killpid = alarm_tuple[alarm_number].pid;
     remove_alarm(alarm_number);
     kill(killpid, SIGKILL);
-    printf("The alarm %d has been cancelled.\n", alarm_number);
+    printf("The alarm %d has been cancelled.\n", alarm_number+1);
 }
 
 const char * current_time()
@@ -97,7 +97,7 @@ void list_alarms()
     for (int i = 0; i < counter; i++) {
         char out[19];
         strftime(out, 19, "%Y-%m-%d %H:%M:%S", localtime(&alarm_tuple[i].time));
-        printf("Alarm %d is at %s\n", i, out);
+        printf("Alarm %d is at %s\n", i+1, out);
     }
 }
 
@@ -135,7 +135,7 @@ int main()
             list_alarms();
             printf("Choose which alarm you want to cancel from the alarms above: ");
             scanf("%d", &cancel__num);
-            cancel_alarm(cancel__num);
+            cancel_alarm(cancel__num-1);
         }
         else if (choice == 'l') {
             list_alarms();
