@@ -49,17 +49,21 @@ void add_timestamps() // Adds  alarm to alarm_tuple
 
     long sec = alarm - time(NULL);
 
-    printf("There are: %ld seconds until %s\n", sec, input);
+    if (sec <= 0)
+        printf("Can't enter a time in the past, plese select 's', 'l', 'c' or 'x'. \n");
+    else {
+        printf("There are: %ld seconds until %s\n", sec, input);
 
-    alarm_tuple[counter].time = alarm;
+        alarm_tuple[counter].time = alarm;
 
-    pid_t childPID = fork();
-    if (childPID) {
-        alarm_tuple[counter].pid = childPID;
-    } else {
-        alarm_set(sec);
+        pid_t childPID = fork();
+        if (childPID) {
+            alarm_tuple[counter].pid = childPID;
+        } else {
+            alarm_set(sec);
+        }
+        counter++;
     }
-    counter++;
 }
 
 void remove_alarm(int alarm_number)
