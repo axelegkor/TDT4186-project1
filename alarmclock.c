@@ -32,7 +32,7 @@ void alarm_set(int sleeptime) { // Waits the amount of second till alarm, and ri
     exit(0);
 }
 
-void add_timestamps() // Adds  alarm to alarm_tuple
+void add_timestamps() // Adds alarm to alarm_tuple
 {
     char input[19];
     time_t alarm;
@@ -82,7 +82,7 @@ void cancel_alarm(int alarm_number) // Cancels and remoes an alarm
     pid_t killpid = alarm_tuple[alarm_number].pid;
     remove_alarm(alarm_number);
     kill(killpid, SIGKILL);
-    printf("The alarm %d has been cancelled.\n", alarm_number+1);
+    printf("Alarm %d has been cancelled.\n", alarm_number+1);
 }
 
 const char * current_time() // Returns the current time
@@ -130,15 +130,24 @@ int main()
             break;
         }
         else if (choice == 's') {
-            flush();
-            add_timestamps();
+            if (counter > 9) {
+                printf("Too many alarms, wait till one rings or cancel one.\n");
+            }
+            else {
+                flush();
+                add_timestamps();
+            }
         }
         else if (choice == 'c') {
             int cancel__num;
             list_alarms();
             printf("Choose which alarm you want to cancel from the alarms above: ");
             scanf("%d", &cancel__num);
-            cancel_alarm(cancel__num-1);
+            if (cancel__num < 1 || cancel__num > counter) {
+                printf("No alarm with chosen alarm number\n");
+            } else {
+                cancel_alarm(cancel__num-1);
+            }          
         }
         else if (choice == 'l') {
             list_alarms();
