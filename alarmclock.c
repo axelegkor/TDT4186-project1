@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 int counter = 0; // Keeps track of where the next alarm should be placed
-static struct {
+static struct { // Tuple that contains alarms and pids
     time_t time;
     pid_t pid;
 } alarm_tuple[10];
@@ -22,7 +22,7 @@ void flush(void)
     } while (i != '\n' && i != EOF);
 }
 
-void alarm_set(int sleeptime) {
+void alarm_set(int sleeptime) { // Waits the amount of second till alarm, and rings a tone
     sleep(sleeptime);
 
     // Playing alarm sound for MacOS
@@ -50,7 +50,7 @@ void add_timestamps() // Adds  alarm to alarm_tuple
     long sec = alarm - time(NULL);
 
     if (sec <= 0)
-        printf("Can't enter a time in the past, plese select 's', 'l', 'c' or 'x'. \n");
+        printf("Can't enter a time in the past, plese select 's', 'l', 'c' or 'x'.\n");
     else {
         printf("There are: %ld seconds until %s\n", sec, input);
 
@@ -66,7 +66,7 @@ void add_timestamps() // Adds  alarm to alarm_tuple
     }
 }
 
-void remove_alarm(int alarm_number)
+void remove_alarm(int alarm_number) // Removes the alarm from the tuple
 {
     for (int i = alarm_number; i < 9; i++) {
         alarm_tuple[i].time = alarm_tuple[i + 1].time;
@@ -77,7 +77,7 @@ void remove_alarm(int alarm_number)
     counter--;
 }
 
-void cancel_alarm(int alarm_number)
+void cancel_alarm(int alarm_number) // Cancels and remoes an alarm
 {   
     pid_t killpid = alarm_tuple[alarm_number].pid;
     remove_alarm(alarm_number);
@@ -85,7 +85,7 @@ void cancel_alarm(int alarm_number)
     printf("The alarm %d has been cancelled.\n", alarm_number+1);
 }
 
-const char * current_time()
+const char * current_time() // Returns the current time
 {
     time_t currentTime;
     struct tm * timeinfo;
@@ -95,7 +95,7 @@ const char * current_time()
     return asctime(timeinfo);
 }
 
-void list_alarms() 
+void list_alarms() // Lists all active alarms in the tuple
 {   
     printf("\n");
     for (int i = 0; i < counter; i++) {
@@ -105,7 +105,7 @@ void list_alarms()
     }
 }
 
-int main()
+int main() 
 {
     char choice;
     printf("Welcome to the alarm clock! It is currently %s\n Please enter 's' (schedule), 'l' (list), 'c' (cancel), 'x' (exit): ", current_time());
@@ -131,7 +131,6 @@ int main()
         }
         else if (choice == 's') {
             flush();
-            //fflush(stdin);
             add_timestamps();
         }
         else if (choice == 'c') {
